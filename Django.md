@@ -31,7 +31,7 @@ def hello(request):
     return HttpResponse("Hello world ! ")
 ```
 
-##接着，绑定 URL 与视图函数。打开 urls.py 文件，删除原来代码，将以下代码复制粘贴到 urls.py 文件中：
+> 接着，绑定 URL 与视图函数。打开 urls.py 文件，删除原来代码，将以下代码复制粘贴到 urls.py 文件中：
 ```
 HelloWorld/HelloWorld/urls.py 文件代码：
 from django.conf.urls import url
@@ -47,7 +47,7 @@ urlpatterns = [
 写入网页就不在啰嗦了，大家可以看一些教程
 
 
-##载入外部js和css
+## 载入外部js和css
 在项目文件夹建立一个static文件夹，将在里面建立js文件夹和css文件夹，将js文件和css文件放入对应文件夹中
 打开setting.py最后一行，修改如下所示
 ```
