@@ -3,7 +3,7 @@
 
 >建立第一个项目HelloWorld
 结构如下
-'
+'''
 $ cd HelloWorld/
 $ tree
 .
@@ -13,7 +13,7 @@ $ tree
 |   |-- urls.py
 |   `-- wsgi.py
 `-- manage.py
-'
+'''
 
 *HelloWorld: 项目的容器。
 *manage.py: 一个实用的命令行工具，可让你以各种方式与该 Django 项目进行交互。
@@ -23,15 +23,15 @@ $ tree
 *HelloWorld/wsgi.py: 一个 WSGI 兼容的 Web 服务器的入口，以便运行你的项目。
 
 ###在先前创建的 HelloWorld 目录下的 HelloWorld 目录新建一个 view.py 文件，并输入代码：
-'
+'''
 HelloWorld/HelloWorld/view.py 文件代码：
 from django.http import HttpResponse
  
 def hello(request):
     return HttpResponse("Hello world ! ")
-'
+'''
 ###接着，绑定 URL 与视图函数。打开 urls.py 文件，删除原来代码，将以下代码复制粘贴到 urls.py 文件中：
-'
+'''
 HelloWorld/HelloWorld/urls.py 文件代码：
 from django.conf.urls import url
  
@@ -40,7 +40,7 @@ from . import view
 urlpatterns = [
     url(r'^$', view.hello),
 ]
-'
+'''
 运行后就可以从127.0.0.1:8000看到hello world
 写入网页就不在啰嗦了，大家可以看一些教程
 
@@ -48,19 +48,19 @@ urlpatterns = [
 >载入外部js和css
 在项目文件夹建立一个static文件夹，将在里面建立js文件夹和css文件夹，将js文件和css文件放入对应文件夹中
 打开setting.py最后一行，修改如下所示
-'
+'''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-'
+'''
 引用时需要注意，按以下格式引用 css js都一样引用
-'
+'''
 {% load staticfiles %}#这句添加在html文件的最上面
 <script src="{% static "js/jquery-3.1.1.min.js" %}" type="text/javascript"></script>
 #注意看这里面的script标签和我们之前的script标签之间的不同
-'
+'''
 
 >对url.py说明
 Django url() 可以接收四个参数，分别是两个必选参数：regex、view 和两个可选参数：kwargs、name，接下来详细介绍这四个参数。
