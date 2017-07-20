@@ -11,8 +11,8 @@ $ tree
 |   |-- __init__.py
 |   |-- settings.py
 |   |-- urls.py
-|   `-- wsgi.py
-`-- manage.py
+|   |-- wsgi.py
+|-- manage.py
 ```
 
 * HelloWorld: 项目的容器。
