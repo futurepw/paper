@@ -1,3 +1,4 @@
+# 安装
 > 说明： 
 protobuf已经全面迁移到[github](https://github.com/google/protobuf) 
 直接下载2.6.1版本:https://github.com/google/protobuf/archive/v2.6.1.zip
@@ -52,11 +53,16 @@ export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/protobuf/include/
 export PKG_CONFIG_PATH=/usr/local/protobuf/lib/pkgconfig/
 ######################################
 
-好了，goog luck
-
-额外赠送： 
 如果出现找不到符号和链接错误请记得加上链接选项 -lprotobuf 
 并确认你的静态库路径是否生效了 
 echo $LIBRARY_PATH
 
 ```
+# .proto文件
+　　.proto文件是protobuf一个重要的文件，它定义了需要序列化数据的结构。使用protobuf的3个步骤是：
+
+1 在.proto文件中定义消息格式
+
+2 用protobuf编译器编译.proto文件
+
+3 用C++/Java等对应的protobuf API来写或者读消息
