@@ -46,7 +46,7 @@ client：
      if data == 'q':
          sys.exit()
  
-     socket.send(data)
+     socket.send(data.encode('utf-8'))
  
      response = socket.recv();
      print response
@@ -70,7 +70,7 @@ server：
  socket.bind("tcp://127.0.0.1:5000")  
  while True:  
      msg = raw_input('input your data:') 
-     socket.send(msg)
+     socket.send(msg.encode('utf-8'))
 ```
 > client：
 ```
@@ -151,7 +151,7 @@ client：
  
  while True:
      data = raw_input('input your data:')
-     socket.send(data)
+     socket.send(data.encode('utf-8'))
 ```
  
 
