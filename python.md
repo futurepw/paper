@@ -405,9 +405,9 @@ def main(key_name, pic_name, key_type='txt', pic_type='png'):
 接下来我们运行一下程序看一下实验效果。
 
 * 开启键盘数据的服务
- * python server.py -p 8888
+    * python server.py -p 8888
 * 开启接收图片数据的服务
- * python server -p 8889
+    * python server -p 8889
 * 运行我们的主程序
- * python main.py
+    * python main.py
 在程序运行期间，你可以在键盘上任意输入就可以进行记录了。运行效果如下,其中shot.png是服务器保存下来的屏幕截图，key.txt是键盘记录的数据。
