@@ -247,4 +247,44 @@ message AddressBook {
  ```
 编译read.cpp文件，g++ addressbook.pb.cc read.cpp -o read `pkg-config --cflags --libs protobuf`
 
-
+# python例子
+## 将proto转化为 xxx_pb2.py ,然后在你的程序里import这个py 
+protoc --python_out=./ ./struct_oss_pb.proto
+得到struct_oss_pb_pb2.py
+## 读写protobuf的示例python
+```
+ # coding: gbk
+ import struct_oss_pb_pb2
+ entitydesc=struct_oss_pb_pb2.entity_desc()
+ entitydesc.entity_id=1
+ entitydesc.entity_name='haha'
+ 
+ #create proto  
+ entityattr=entitydesc.attributes.add() #嵌套message
+ entityattr.attr_id = 11
+ entityattr.attribute = '标题'.decode('gbk').encode('utf-8')
+ entityattr.value.append("title adfadf")  
+ 
+ entity_attr_str=entityattr.SerializeToString()  
+ print entity_attr_str
+ entitydesc_str=entitydesc.SerializeToString()  
+ print entitydesc_str    
+ print '----'
+ #read
+ entityattr2 = struct_oss_pb_pb2.entity_attr()
+ entityattr2.ParseFromString(entity_attr_str)
+ print entityattr2.attr_id    
+ print entityattr2.attribute.decode('utf-8').encode('gbk')
+ for i in entityattr2.value:
+    print i
+    
+ print '----'
+ entitydesc2=struct_oss_pb_pb2.entity_desc()
+ entitydesc2.ParseFromString(entitydesc_str)    
+ print entitydesc2.entity_id
+ #repeated entity_attr attributes，由于是repeated需要遍历
+ for oneatt in entitydesc2.attributes:
+    print oneatt.attr_id
+    for i in oneatt.value:
+ 　　print i
+```
