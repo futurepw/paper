@@ -157,3 +157,38 @@ client：
 
 消息结构：
 在每个消息buff前均会自带一个buff长度
+
+# Protobuf序列化与反序列化
+## 1.初始化
+set_xxx()设置required,optional字段值
+add_xxx()添加repeated字段值
+set_xxx(int,x)设置repeated中元素的值
+## 2.序列化
+```
+required字段需要初始化,可以通过IsInitialized来检查是否完成message对象的初始化
+SerializedAsString(),SerializedToString(std::string*)序列化为std::string
+SerializedToArray(void*,int)序列化为byte数组
+SerializedToOstream(ostream*)序列化到输出流
+ByteSize()获取二进制字节序的大小，可用于初始化存放容器
+```
+## 3.反序列化
+```
+ParseFromString(std::string& data)从字符串中反序列化
+ParseFromArray(const void *,int)从字节序中反序列化
+ParseFromIstream(istream*)从输入流中反序列化
+has_xxx()用于检查相应字段是否存在数据
+xxx_size()用于确定repeated字段是否存在，0表示未序列化
+```
+## 4.获取对象
+```
+xxx()返回required/optional字段的const值,只读模式，返回repeated列表的指针,用于修改
+mutable_xxx()返回字段指针,用于修改
+xxx(int)返回repeated字段列表的元素,只读
+protobuf实现原理
+```
+# protobuf的cache机制
+* protobuf message的clear()操作是存在cache机制的，它并不会释放申请的空间，这导致占用的空间越来越大。
+* 如果程序中protobuf message占用的空间变化很大，那么最好每次或定期进行清理。这样可以避免内存不断的上涨。
+> 注意事项
+嵌套定义时，被嵌套的结构体被解析成A_B形式,需要获取mutable_b()指针来初始化该字段,使用栈上的对象会导致程序异常
+应用程序中使用protobuf,需要在退出程序时调用google::protobuf::ShutdownProtobufLibrary()以清理内存,否则会造成内存泄漏
