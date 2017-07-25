@@ -20,6 +20,7 @@ chmod -R 755 *
 ```
 #!/usr/bin/python
 #-*-coding:utf-8-*-
+# peiwei
 import time
 import zmq
 import addressbook_pb2
@@ -47,6 +48,9 @@ while True:
 ```
 ## client
 ```
+#!/usr/bin/python
+#-*-coding:utf-8-*-
+# peiwei
 import addressbook_pb2
 import zmq
 import sys
