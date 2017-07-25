@@ -244,62 +244,100 @@ Please use 'syntax = "proto2";' or 'syntax = "proto3";' to specify a syntax vers
 ```
 ## 读写protobuf的示例python
 ```
- import addressbook_pb2
- import sys
- 
- def PromptForAddress(person):
-     person.id = int(raw_input("Please input the id of this person..."))
-     person.name = raw_input("Please input a name for the person...")
-     email = raw_input("Please enter the email address of the person....")
- 
-     if email != "":
-         person.email = email
-         pass
- 
-     while True:
-         number = raw_input("Enter a phone number :")
-         if number == "":
-             break
-             pass
- 
-         phone_number = person.phone.add()
-         phone_number.number = number
- 
- 
-         type = raw_input("Is this a mobile, home, or work phone?")
-         if type == "mobile":
-             phone_number.type = addressbook_pb2.Person.MOBILE
-         elif type == "home":
-             phone_number.type = addressbook_pb2.Person.HOME
-         elif type == "work":
-             phone_number.type = addressbook_pb2.Person.WORK
-         else:
-             print("Unknown phont type; leaving as default value.")
-             pass
-         pass
-     pass
- 
- 
- if len(sys.argv) != 2:
-     print("Usage:", sys.argv[0], "ADDRESS_BOOK_FILE")
-     sys.exit(-1)
-     pass
- print("What am i doing....")
- address_book = addressbook_pb2.AddressBook()
- 
- try:
-     f = open(sys.argv[1], "rb")
-     address_book.ParseFromString(f.read())
-     f.close()
- except IOError, e:
-     print(sys.argv[1] + " : File not found. Creating a new file")
-     pass
- 
- PromptForAddress(address_book.person.add())
- 
- f = open(sys.argv[1], "wb")
- f.write(address_book.SerializeToString())
- f.close()
+#! /usr/bin/python
+
+import addressbook_pb2
+import sys
+
+# This function fills in a Person message based on user input.
+def PromptForAddress(person):
+  person.id = int(raw_input("Enter person ID number: "))
+  person.name = raw_input("Enter name: ")
+
+  email = raw_input("Enter email address (blank for none): ")
+  if email != "":
+    person.email = email
+
+  while True:
+    number = raw_input("Enter a phone number (or leave blank to finish): ")
+    if number == "":
+      break
+
+    phone_number = person.phones.add()
+    phone_number.number = number
+
+    type = raw_input("Is this a mobile, home, or work phone? ")
+    if type == "mobile":
+      phone_number.type = addressbook_pb2.Person.MOBILE
+    elif type == "home":
+      phone_number.type = addressbook_pb2.Person.HOME
+    elif type == "work":
+      phone_number.type = addressbook_pb2.Person.WORK
+    else:
+      print "Unknown phone type; leaving as default value."
+
+# Main procedure:  Reads the entire address book from a file,
+#   adds one person based on user input, then writes it back out to the same
+#   file.
+if len(sys.argv) != 2:
+  print "Usage:", sys.argv[0], "ADDRESS_BOOK_FILE"
+  sys.exit(-1)
+
+address_book = addressbook_pb2.AddressBook()
+
+# Read the existing address book.
+try:
+  f = open(sys.argv[1], "rb")
+  address_book.ParseFromString(f.read())
+  f.close()
+except IOError:
+  print sys.argv[1] + ": Could not open file.  Creating a new one."
+
+# Add an address.
+PromptForAddress(address_book.people.add())
+
+# Write the new address book back to disk.
+f = open(sys.argv[1], "wb")
+f.write(address_book.SerializeToString())
+f.close()
+```
+```
+#! /usr/bin/python
+
+import addressbook_pb2
+import sys
+
+# Iterates though all people in the AddressBook and prints info about them.
+def ListPeople(address_book):
+  for person in address_book.people:
+    print "Person ID:", person.id
+    print "  Name:", person.name
+    if person.HasField('email'):
+      print "  E-mail address:", person.email
+
+    for phone_number in person.phones:
+      if phone_number.type == addressbook_pb2.Person.MOBILE:
+        print "  Mobile phone #: ",
+      elif phone_number.type == addressbook_pb2.Person.HOME:
+        print "  Home phone #: ",
+      elif phone_number.type == addressbook_pb2.Person.WORK:
+        print "  Work phone #: ",
+      print phone_number.number
+
+# Main procedure:  Reads the entire address book from a file and prints all
+#   the information inside.
+if len(sys.argv) != 2:
+  print "Usage:", sys.argv[0], "ADDRESS_BOOK_FILE"
+  sys.exit(-1)
+
+address_book = addressbook_pb2.AddressBook()
+
+# Read the existing address book.
+f = open(sys.argv[1], "rb")
+address_book.ParseFromString(f.read())
+f.close()
+
+ListPeople(address_book)
 ```
 # Protobuf 语法指南
 [语法指南](https://github.com/futurepw/paper/blob/master/protobuf%E8%AF%AD%E6%B3%95%E6%8C%87%E5%8D%97.md)
