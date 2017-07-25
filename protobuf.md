@@ -41,7 +41,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/peiwei/protobuf/lib/
 #(静态库搜索路径) 程序编译期间查找动态链接库时指定查找共享库的路径
 export LIBRARY_PATH=$LIBRARY_PATH:/home/peiwei/protobuf/lib/
 #执行程序搜索路径
-export PATH=$PATH:/usr/local/protobuf/bin/
+export PATH=$PATH:/home/peiwei/protobuf/bin/
 #c程序头文件搜索路径
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:/home/peiwei/protobuf/include/
 #c++程序头文件搜索路径
