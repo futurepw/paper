@@ -1,8 +1,7 @@
 # 安装
 > 说明： 
 protobuf已经全面迁移到[github](https://github.com/google/protobuf) 
-直接下载2.6.1版本:https://github.com/google/protobuf/archive/v2.6.1.zip
-默认安装步骤(需root权限)：
+[下载地址](https://github.com/google/protobuf/releases)
 ```
 $wget https://github.com/google/protobuf/archive/v2.6.1.zip
 $unzip protobuf-2.6.1.zip
@@ -12,7 +11,6 @@ $cd protobuf-2.6.1
 
 $ ./configure
 $ make
-$ make check
 $ make install
 
 我使用的是centos系统
