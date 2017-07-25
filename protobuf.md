@@ -244,40 +244,62 @@ Please use 'syntax = "proto2";' or 'syntax = "proto3";' to specify a syntax vers
 ```
 ## 读写protobuf的示例python
 ```
- # coding: gbk
- import struct_oss_pb_pb2
- entitydesc=struct_oss_pb_pb2.entity_desc()
- entitydesc.entity_id=1
- entitydesc.entity_name='haha'
+ import addressbook_pb2
+ import sys
  
- #create proto  
- entityattr=entitydesc.attributes.add() #嵌套message
- entityattr.attr_id = 11
- entityattr.attribute = '标题'.decode('gbk').encode('utf-8')
- entityattr.value.append("title adfadf")  
+ def PromptForAddress(person):
+     person.id = int(raw_input("Please input the id of this person..."))
+     person.name = raw_input("Please input a name for the person...")
+     email = raw_input("Please enter the email address of the person....")
  
- entity_attr_str=entityattr.SerializeToString()  
- print entity_attr_str
- entitydesc_str=entitydesc.SerializeToString()  
- print entitydesc_str    
- print '----'
- #read
- entityattr2 = struct_oss_pb_pb2.entity_attr()
- entityattr2.ParseFromString(entity_attr_str)
- print entityattr2.attr_id    
- print entityattr2.attribute.decode('utf-8').encode('gbk')
- for i in entityattr2.value:
-    print i
-    
- print '----'
- entitydesc2=struct_oss_pb_pb2.entity_desc()
- entitydesc2.ParseFromString(entitydesc_str)    
- print entitydesc2.entity_id
- #repeated entity_attr attributes，由于是repeated需要遍历
- for oneatt in entitydesc2.attributes:
-    print oneatt.attr_id
-    for i in oneatt.value:
- 　　print i
+     if email != "":
+         person.email = email
+         pass
+ 
+     while True:
+         number = raw_input("Enter a phone number :")
+         if number == "":
+             break
+             pass
+ 
+         phone_number = person.phone.add()
+         phone_number.number = number
+ 
+ 
+         type = raw_input("Is this a mobile, home, or work phone?")
+         if type == "mobile":
+             phone_number.type = addressbook_pb2.Person.MOBILE
+         elif type == "home":
+             phone_number.type = addressbook_pb2.Person.HOME
+         elif type == "work":
+             phone_number.type = addressbook_pb2.Person.WORK
+         else:
+             print("Unknown phont type; leaving as default value.")
+             pass
+         pass
+     pass
+ 
+ 
+ if len(sys.argv) != 2:
+     print("Usage:", sys.argv[0], "ADDRESS_BOOK_FILE")
+     sys.exit(-1)
+     pass
+ print("What am i doing....")
+ address_book = addressbook_pb2.AddressBook()
+ 
+ try:
+     f = open(sys.argv[1], "rb")
+     address_book.ParseFromString(f.read())
+     f.close()
+ except IOError, e:
+     print(sys.argv[1] + " : File not found. Creating a new file")
+     pass
+ 
+ PromptForAddress(address_book.person.add())
+ 
+ f = open(sys.argv[1], "wb")
+ f.write(address_book.SerializeToString())
+ f.close()
 ```
 # Protobuf 语法指南
 [语法指南](https://github.com/futurepw/paper/blob/master/protobuf%E8%AF%AD%E6%B3%95%E6%8C%87%E5%8D%97.md)
