@@ -76,7 +76,7 @@ float           float         float
 int32           int           int32       使用可变长编码方式。编码负数时不够高效——如果你的字段可能含有负数，那么请使用sint32。
 int64           long          int64       使用可变长编码方式。编码负数时不够高效——如果你的字段可能含有负数，那么请使用sint64。
 uint32          int[1]        uint32      Uses variable-length encoding.
-uint64          long[1]	      uint64    Uses variable-length encoding.
+uint64          long[1]	      uint64      Uses variable-length encoding.
 sint32          int           int32       使用可变长编码方式。有符号的整型值。编码时比通常的int32高效。
 sint64          long          int64       使用可变长编码方式。有符号的整型值。编码时比通常的int64高效。
 fixed32         int[1]        uint32      总是4个字节。如果数值总是比总是比228大的话，这个类型会比uint32高效。
