@@ -280,3 +280,4 @@ Please use 'syntax = "proto2";' or 'syntax = "proto3";' to specify a syntax vers
  　　print i
 ```
 # Protobuf 语法指南
+[语法指南](https://github.com/futurepw/paper/blob/master/protobuf%E8%AF%AD%E6%B3%95%E6%8C%87%E5%8D%97.md)
