@@ -242,6 +242,17 @@ protoc --python_out=./  ./struct_oss_pb.proto
 Please use 'syntax = "proto2";' or 'syntax = "proto3";' to specify a syntax version. (Defaulted to proto2 syntax.)
 如果报此类错误，需要在proto文件第一行加 syntax = "proto2";
 ```
+## 读取例子
+'''
+import addressbook_pb2
+person = addressbook_pb2.Person()
+person.id = 1234
+person.name = "peiwei"
+person.email = "jdoe@example.com"
+phone = person.phone.add()
+phone.number = "555-4321"
+phone.type = addressbook_pb2.Person.HOME
+'''
 ## 读写protobuf的示例python
 ```
 #! /usr/bin/python
