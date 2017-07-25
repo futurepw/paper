@@ -332,7 +332,6 @@ max 是 2^29 - 1, 或者 536,870,911.
 
 # Oneof
 
-==================
 
 如果你的消息中有很多可选字段， 并且同时至多一个字段会被设置， 你可以加强这个行为，使用oneof特性节省内存.
 
@@ -396,7 +395,6 @@ CHECK(msg2.has_name());
 * Split or merge oneof: This has similar issues to moving regular optional fields.
 # 包（Package）
 
-==================
 当然可以为.proto文件新增一个可选的package声明符，用来防止不同的消息类型有命名冲突。如：
 
 ```
@@ -488,7 +486,6 @@ There are a number of ongoing third-party projects to develop RPC implementation
 
 # 选项（Options）
 
-==================
 在定义.proto文件时能够标注一系列的options。Options并不改变整个文件声明的含义，但却能够影响特定环境下处理方式。完整的可用选项可以在google/protobuf/descriptor.proto找到。
 
 一些选项是文件级别的，意味着它可以作用于最外范围，不包含在任何消息内部、enum或服务定义中。一些选项是消息级别的，意味着它可以用在消息定 义的内部。当然有些选项可以作用在域、enum类型、enum值、服务类型及服务方法中。到目前为止，并没有一种有效的选项能作用于所有的类型。
@@ -639,8 +636,6 @@ message Bar {
 }
 ```
 # 生成访问类
-
-================
 
 可以通过定义好的.proto文件来生成Java、Python、C++代码，需要基于.proto文件运行protocol buffer编译器protoc。运行的命令如下所示：
 ```
