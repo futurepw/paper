@@ -236,8 +236,12 @@ message AddressBook {
 
 # python例子
 ## 将proto转化为 xxx_pb2.py ,然后在你的程序里import这个py 
-protoc --python_out=./ ./struct_oss_pb.proto
+protoc --python_out=./  ./struct_oss_pb.proto
 得到struct_oss_pb_pb2.py
+```
+Please use 'syntax = "proto2";' or 'syntax = "proto3";' to specify a syntax version. (Defaulted to proto2 syntax.)
+如果报此类错误，需要在proto文件第一行加 syntax = "proto2";
+```
 ## 读写protobuf的示例python
 ```
  # coding: gbk
@@ -275,3 +279,4 @@ protoc --python_out=./ ./struct_oss_pb.proto
     for i in oneatt.value:
  　　print i
 ```
+# Protobuf 语法指南
