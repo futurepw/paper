@@ -1,8 +1,20 @@
 # zmq资料
-[zmq资料]()
+[zmq资料](https://github.com/futurepw/paper/blob/master/zmq.md)
 # protobuf资料
-[protobuf资料]()
+[protobuf配置资料](https://github.com/futurepw/paper/blob/master/protobuf.md)
+[protobuf语法资料](https://github.com/futurepw/paper/blob/master/protobuf%E8%AF%AD%E6%B3%95%E6%8C%87%E5%8D%97.md)
 # 测试代码
+## 测试中的错误
+> 报No module named google.protobuf 错误
+
+这是因为安装Google.protobuf后还要在重新配置Python，配置如下：
+```
+/home/peiwei/protobuf-2.4.1/python
+python setup.py build
+python setup.py install
+cd /usr/local/lib/python2.7/site-packages
+chmod -R 755 *
+```
 ## server
 > SerializeToString()函数是将对象序列化 ParseFromString()函数是将序列化的对象反序列化
 ```
