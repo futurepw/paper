@@ -1,3 +1,10 @@
+# TensorFlow API
+[Tensorflow Python API 翻译（nn）](http://www.jianshu.com/p/e3a79eac554f)<br>
+[Tensorflow Python API 翻译（sparse_ops）](http://www.jianshu.com/p/c233e09d2f5f)<br>
+[Tensorflow Python API 翻译（math_ops）（第一部分）](http://www.jianshu.com/p/ce4ee40963c1)<br>
+[Tensorflow Python API 翻译（math_ops）（第二部分）](http://www.jianshu.com/p/4daafdbcdddf)<br>
+[Tensorflow Python API 翻译（array_ops）](http://www.jianshu.com/p/00ab12bc357c)<br>
+[Tensorflow Python API 翻译（constant_op）](http://www.jianshu.com/p/d05ded5678b0)<br>
 # 矩阵乘法
 > tf.Variable 和 tf.placeholder的区别，两者都可以盛放变量，但在启动会话前，tf.Variable必须先被赋值和初始化，而tf.placeholder是需要在启动会话的时候传入值的；从直观上讲，tf.placeholder更加接近函数的形参。
 ```
