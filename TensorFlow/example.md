@@ -208,3 +208,11 @@ for i in range(100):
         np.argmax(testY, axis=1) == sess.run(predict_op, feed_dict={X: testX, p_keep_input: 1.0, p_keep_hidden: 1.0})))
 
 ```
+# Convolutional Neural Network
+```
+
+```
+# Recurrent Neural Network (LSTM)
+```
+
+```
