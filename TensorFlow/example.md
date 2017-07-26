@@ -222,7 +222,6 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 
-batch_size = 128
 test_size = 256
 
 
@@ -288,5 +287,90 @@ for i in range(100):
 ```
 # Recurrent Neural Network (LSTM)
 ```
+#!/usr/bin/python3
+# -*- coding:utf-8 _*-
+"""
+@author:peiwei
+@file: tf.py
+@time: 2017/07/26
+"""
+import tensorflow as tf
+import numpy as np
+from tensorflow.contrib import rnn
+from tensorflow.examples.tutorials.mnist import input_data
+
+# configuration
+#                        O * W + b -> 10 labels for each image, O[? 28], W[28 10], B[10]
+#                       ^ (O: output 28 vec from 28 vec input)
+#                       |
+#      +-+  +-+       +--+
+#      |1|->|2|-> ... |28| time_step_size = 28
+#      +-+  +-+       +--+
+#       ^    ^    ...  ^
+#       |    |         |
+# img1:[28] [28]  ... [28]
+# img2:[28] [28]  ... [28]
+# img3:[28] [28]  ... [28]
+# ...
+# img128 or img256 (batch_size or test_size 256)
+#      each input size = input_vec_size=lstm_size=28
+# configuration variables
+
+input_vec_size = lstm_size = 28
+time_step_size = 28
+batch_size = 128
+test_size = 256
+
+
+def init_weights(shape):
+    return tf.Variable(tf.random_normal(shape, stddev=0.01))
+
+
+def model(X, W, B, lstm_size):
+    # X, input shape: (batch_size, time_step_size, input_vec_size)
+    XT = tf.transpose(X, [1, 0, 2])  # permute time_step_size and batch_size
+    # XT shape: (time_step_size, batch_size, input_vec_size)
+    XR = tf.reshape(XT, [-1, lstm_size])  # each row has input for each lstm cell (lstm_size=input_vec_size)
+    # XR shape: (time_step_size * batch_size, input_vec_size)
+    X_split = tf.split(XR, time_step_size, 0)  # split them to time_step_size (28 arrays)
+    # Each array shape: (batch_size, input_vec_size)
+    # Make lstm with lstm_size (each input vector size)
+    lstm = rnn.BasicLSTMCell(lstm_size, forget_bias=1.0, state_is_tuple=True)
+    # Get lstm cell output, time_step_size (28) arrays with lstm_size output: (batch_size, lstm_size)
+    outputs, _states = rnn.static_rnn(lstm, X_split, dtype=tf.float32)
+    # Linear activation
+    # Get the last output
+    return tf.matmul(outputs[-1], W) + B, lstm.state_size
+
+
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+trainX, trainY, testX, testY = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
+trainX = trainX.reshape(-1, 28, 28)
+testX = testX.reshape(-1, 28, 28)
+
+X = tf.placeholder("float", [None, 28, 28])
+Y = tf.placeholder("float", [None, 10])
+
+W = init_weights([lstm_size, 10])
+B = init_weights([10])
+
+py_x, state_size = model(X, W, B, lstm_size)
+
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=py_x, labels=Y))
+train_op = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
+predict_op = tf.argmax(py_x, 1)
+
+session_conf = tf.ConfigProto()
+session_conf.gpu_options.allow_growth = True
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+for i in range(100):
+    for start, end in zip(range(0, len(trainX), batch_size), range(batch_size, len(trainX) + 1, batch_size)):
+        sess.run(train_op, feed_dict={X: trainX[start:end], Y: trainY[start:end]})
+    test_indices = np.arange(len(testX))
+    np.random.shuffle(test_indices)
+    test_indices = test_indices[0:test_size]
+    print(i, np.mean(np.argmax(testY[test_indices], axis=1) == sess.run(predict_op, feed_dict={X: testX})))
 
 ```
