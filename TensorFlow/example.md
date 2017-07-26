@@ -230,32 +230,30 @@ import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 
 test_size = 256
+def conv2d(X, w):
+    # 卷积遍历各方向步数为1，SAME：边缘外自动补0，遍历相乘
+    return tf.nn.conv2d(X, w, strides=[1, 1, 1, 1], padding="SAME")
 
+def relu(X, w):
+    return tf.nn.relu(conv2d(X, w))
+
+def max_pool_2x2(X):
+    # 池化卷积结果（conv2d）池化层采用kernel大小为2*2，步数也为2，周围补0，取最大值。数据量缩小了4倍
+    return tf.nn.max_pool(X, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding="SAME")
 
 def init_weights(shape):
+    # 正态分布，标准差为0.1，默认最大为1，最小为-1，均值为0
     return tf.Variable(tf.random_normal(shape, stddev=0.01))
 
-
 def model(X, w, w2, w3, w4, w_o, p_keep_conv, p_keep_hidden):
-    l1a = tf.nn.relu(tf.nn.conv2d(X, w, strides=[1, 1, 1, 1], padding='SAME'))  # l1a shape=(?, 28, 28, 32)
-    l1 = tf.nn.max_pool(l1a, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')  # l1 shape=(?, 14, 14, 32)
-    l1 = tf.nn.dropout(l1, p_keep_conv)
-
-    l2a = tf.nn.relu(tf.nn.conv2d(l1, w2, strides=[1, 1, 1, 1], padding='SAME'))  # l2a shape=(?, 14, 14, 64)
-    l2 = tf.nn.max_pool(l2a, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')  # l2 shape=(?, 7, 7, 64)
-    l2 = tf.nn.dropout(l2, p_keep_conv)
-
-    l3a = tf.nn.relu(tf.nn.conv2d(l2, w3, strides=[1, 1, 1, 1], padding="SAME"))  # l3a shape=(?, 7, 7, 128)
-    l3 = tf.nn.max_pool(l3a, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding="SAME")  # l3 shape=(?, 4, 4, 128)
-    l3 = tf.reshape(l3, [-1, w4.get_shape().as_list()[0]])  # reshape to (?, 2048)
+    l1 = tf.nn.dropout(max_pool_2x2(relu(X, w)), p_keep_conv)
+    l2 = tf.nn.dropout(max_pool_2x2(relu(l1, w2)), p_keep_conv)
+    l3 = tf.reshape(max_pool_2x2(relu(l2, w3)), [-1, w4.get_shape().as_list()[0]])
     l3 = tf.nn.dropout(l3, p_keep_conv)
-
     l4 = tf.nn.relu(tf.matmul(l3, w4))
     l4 = tf.nn.dropout(l4, p_keep_hidden)
-
     pyx = tf.matmul(l4, w_o)
     return pyx
-
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 trainX, trainY, testX, testY = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
@@ -290,7 +288,6 @@ for i in range(100):
     print(i, np.mean(np.argmax(testY[test_indices], axis=1) == sess.run(predict_op,
                                                                         feed_dict={X: testX, p_keep_conv: 1.0,
                                                                                    p_keep_hidden: 1.0})))
-
 ```
 # Recurrent Neural Network (LSTM)
 ```
