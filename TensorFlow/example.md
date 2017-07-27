@@ -7,6 +7,7 @@
 [Tensorflow Python API 翻译（constant_op）](http://www.jianshu.com/p/d05ded5678b0)<br>
 [教程](https://github.com/aymericdamien/TensorFlow-Examples)<br>
 [博客园](http://www.cnblogs.com/denny402/p/5852689.html)
+[卷积神经网络](http://it.sohu.com/20170723/n503506103.shtml)
 # 矩阵乘法
 > tf.Variable 和 tf.placeholder的区别，两者都可以盛放变量，但在启动会话前，tf.Variable必须先被赋值和初始化，而tf.placeholder是需要在启动会话的时候传入值的；从直观上讲，tf.placeholder更加接近函数的形参。
 ```
