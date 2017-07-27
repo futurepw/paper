@@ -1,6 +1,7 @@
 # TensorFlow
 > 目前主流的`TensorFlow`，用tensorflow这样工具的原因是：它允许我们用计算图（Computational Graphs）的方式建立网络。同时又可以非常方便的对网络进行操作。
 
+[资料](http://www.jianshu.com/p/e0238db24973)
 # 示例
 
 ```
