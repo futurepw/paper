@@ -73,3 +73,30 @@ class Graphics:
         #保存裁切后的图片  
         crop_img.save(cls.outfile)  
 ```
+# 批量读取图片并转为数组
+```
+from skimage import io,transform
+import glob
+import os
+import numpy as np
+import time
+
+def read_img(path,h=100,w=100):#path 为文件夹路径 h，w为设置高度和宽度 默认为100*100
+    cate = [path + x for x in os.listdir(path) if os.path.isdir(path+x)] #os.listdir(path) 列出所有文件夹和文件名  
+                                                                         #os.path.isdir(path+x)判断是否为文件夹
+    imgs = []
+    labels = []
+    for idx, folder in enumerate(cate):
+        print(folder)
+        for im in glob.glob(folder + '/*.jpg'):
+            print('reading the images:%s' % (im))
+            img = io.imread(im)
+            img = transform.resize(img, (w, h))
+            imgs.append(img)
+            labels.append(idx)
+    return np.asarray(imgs, np.float32), np.asarray(labels, np.int32)
+
+path = ".\photo\\"
+data, label = read_img(path)
+print(data, label)
+```
