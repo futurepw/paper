@@ -99,4 +99,20 @@ def read_img(path,h=100,w=100):#path 为文件夹路径 h，w为设置高度和�
 path = ".\photo\\"
 data, label = read_img(path)
 print(data, label)
+
+#打乱顺序
+num_example=data.shape[0] #data数组的长度
+arr=np.arange(num_example) #相当于range
+np.random.shuffle(arr) #将序列的所有元素随机排序
+data=data[arr]
+label=label[arr]
+
+
+#将所有数据分为训练集和验证集
+ratio=0.8
+s=np.int(num_example*ratio)
+x_train=data[:s]
+y_train=label[:s]
+x_val=data[s:]
+y_val=label[s:]
 ```
