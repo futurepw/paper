@@ -186,4 +186,4 @@ analyzers-common 组件提供了一系列的 Analyzer 实现。
 
 * 4、创建 IndexSearcher 并且把 query 传到它的 search() 方法。
 
-Lucene 的索引操作的内容，可以查看之前写过的建立Lucene索引和搜索Lucene索引。
+[参考](http://luceneapi.com/lucene-base)
