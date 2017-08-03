@@ -115,3 +115,75 @@ IndexReader需要通过FSDirectory.open(new File(indexDir));来获取。
 
 查询得打的TopDocs对象，其实并没有包含我们需要的查询结果，它只包含了我们所查询到的结果的id。
 需要使用searcher.doc(scoreDoc.doc);方法来获取我们的插叙结果，也就是我们需要的Document。
+
+
+# lucene api 介绍
+
+Lucene 是一个高性能的全文搜索框架，下面是使用 Lucene 的简单例子：
+```
+Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+ 
+// Store the index in memory:
+Directory directory = new RAMDirectory();
+// To store an index on disk, use this instead:
+//Directory directory = FSDirectory.open("/tmp/testindex");
+IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_CURRENT, analyzer);
+IndexWriter iwriter = new IndexWriter(directory, config);
+Document doc = new Document();
+String text = "This is the text to be indexed.";
+doc.add(new Field("fieldname", text, TextField.TYPE_STORED));
+iwriter.addDocument(doc);
+iwriter.close();
+ 
+// Now search the index:
+DirectoryReader ireader = DirectoryReader.open(directory);
+IndexSearcher isearcher = new IndexSearcher(ireader);
+// Parse a simple query that searches for "text":
+QueryParser parser = new QueryParser(Version.LUCENE_CURRENT, "fieldname", analyzer);
+Query query = parser.parse("text");
+ScoreDoc[] hits = isearcher.search(query, null, 1000).scoreDocs;
+    assertEquals(1, hits.length);
+// Iterate through the results:
+for (int i = 0; i < hits.length; i++) {
+    Document hitDoc = isearcher.doc(hits[i].doc);
+    assertEquals("This is the text to be indexed.", hitDoc.get("fieldname"));
+}
+ireader.close();
+directory.close();
+```
+## 下面来给大家简单介绍一下 Lucene 的 API。
+
+Lucene API 可以分为几个部分：
+
+org.apache.lucene.analysis 定义了抽象的 Analyzer API 来实现文本从一个 text 文本流到 Token 流的转换。 
+Token 流是有由 Tokenizer（语汇分解器）的输出结果和 TokenFilters（语汇过滤器）组合而成。
+Tokenizer 和 TokenFilters 组合起来在一个 Analyzer 里面使用。
+analyzers-common 组件提供了一系列的 Analyzer 实现。
+包括 StopAnalyzer（停词分析器） 和 grammar-based StandardAnalyzer（基础语法分析器）。
+
+* org.apache.lucene.codecs 提供了倒排索引的编码和解码的抽象方法。在程序中可以根据自己的需要来选择不同的倒排索引实现。
+
+* org.apache.lucene.document 提供了一个简单的文档类。一个文档里面包括一系列的元数据，这些数据的值，可以是字符串或者 Reader 实例。
+
+* org.apache.lucene.index 提供了两个高级的类：IndexWriter 和 IndexReader。IndexWriter 用来在索引里面添加或者创建 document。
+  IndexReader 用来在索引里面读取数据。
+
+* org.apache.lucene.search 提供把查询用数据结构的形式表示（例如：TermQuery 表示分解后的单词，BooleanQuery 表示 boolean。）。
+  IndexSearcher 把查询转成 TopDocs。该组件中提供了一些 QueryParsers 来吧字符串或者 xml 生成查询结构。
+
+* org.apache.lucene.store 定义了持久化数据的抽象类。Directory 是包含一些索引文件。已经有了几个不同的实现了，包括 FSDirectory、
+  RAMDirectory等。FSDirectory用来把文件保存在文件系统。RAMDirectory 用来包数据保存在内存里面。
+
+* org.apache.lucene.util 包含了一些数据处理工具等。
+
+## 用户使用 Lucene 几个步骤：
+
+* 1、通过添加 Fields 来创建 document。
+
+* 2、创建 IndexWriter，并且把 documents 通过 addDocument() 添加到 IndexWriter 中。
+
+* 3、调用 QueryParser.parse() 命令来查询字符串转化成查询。
+
+* 4、创建 IndexSearcher 并且把 query 传到它的 search() 方法。
+
+Lucene 的索引操作的内容，可以查看之前写过的建立Lucene索引和搜索Lucene索引。
