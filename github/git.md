@@ -7,7 +7,19 @@ github远程提交代码有两种方式，一种是ssh，一种是http，我们�
 在命令行下输入ssh -T git@github.com 
 执行后提示：Permission denied (publickey) 
 ```
-
+# 配置ssh key
+```
+代码ssh-keygen -C "yourname@gmail.com" -f ~/.ssh/github 
+```
+然后将~/.ssh/github.pub公钥中的内容复制到剪贴板，公钥是一行长长的字符串(不要后面的邮箱)，注意在粘贴时不要加入多余的空格、换行符等，
+否则在公钥认证过程当中因为服务端和客户端公钥不匹配而导致认证失败。最后将正确的公钥内容拷贝到GitHub的Key文本框中，并为这个ssh起个名
+字，保存即可。 
+注意 linux下查看文件的命令是 cat 或者 gedit
+## 测试
+```
+在命令行下输入ssh -T git@github.com 
+执行后提示：Hi username! You’ve successfully authenticated, but GitHub does not provide shell access.
+```
 # 开始使用github
 
 > 配置git
@@ -114,7 +126,7 @@ git remote add origin https://github.com/你的github用户名/你的github仓�
 push
 ```
 git push origin master
-``
+```
 注：另外可能用到的命令
 ```
 git remote rm origin
