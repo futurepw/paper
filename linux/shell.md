@@ -124,3 +124,220 @@ done
  
 * 循环控制命令——continue
     * continue命令是一种提前停止循环内命令，而不完全终止循环的方法，这就需要在循环内设置shell不执行命令的条件
+    
+# 条件
+bash条件测试
+```
+格式
+test EXPR  
+[ EXPR ]：注意中括号和表达式之间的空格  
+```
+
+```
+整型测试：
+   -gt：大于：
+   -lt：小于
+   -ge：大于等于
+   -le：小于等于
+   -eq：等于
+   -ne：不等于
+例如[ $num1 -gt $num2 ]或者test $num1 -gt $num2
+ 
+字符串测试：
+= 等于，例如判断变量是否为空 [ "$str" =  "" ] 或者[ -z $str ]
+!= 不等于
+```
+* 实例
+```
+num1=10
+num2=20
+str1=peiwei
+str2=ju
+if [ $num1 -gt $num2 ]
+then
+echo num1 large than num2
+else
+echo num1 lower than num2
+fi
+# 结果
+# num1 lower than num2
+# str1 is not empty
+if [ -z $str1 ]
+then 
+echo str1 is empty
+else
+echo str1 is not empty
+fi
+```
+
+## 判断
+> if 判断
+```
+# 单分支
+if 测试条件;then  
+   选择分支  
+fi 
+
+# 双分支
+if 测试条件;then  
+   选择分支1  
+else  
+   选择分支2  
+fi 
+
+# 多分支
+if 条件1; then  
+     分支1  
+elif 条件2; then  
+     分支2  
+elif 条件3; then  
+     分支3  
+     ...  
+else  
+     分支n  
+fi 
+```
+> case 判断
+```
+case 变量引用 in  
+     PATTERN1)  
+         分支1  
+         ;;  
+     PATTERN2)  
+         分支2  
+         ;;  
+         ...  
+     *)  
+         分支n  
+         ;;  
+esac 
+
+
+PATTERN :类同于文件名通配机制，但支持使用|表示或者
+a|b：a或者b
+*：匹配任意长度的任意字符
+?：匹配任意单个字符
+[a-z]：指定范围内的任意单个字符
+```
+
+```
+#!/bin/bash
+
+num=10
+case $num in 
+        1)
+            echo 1
+                ;;
+        2)
+            echo 2
+                ;;
+        10)  
+            echo 10
+                ;;
+        *)
+            echo something else
+                ;;
+esac
+```
+> 算术运算
+* let varName=算术表达式  
+   
+* varName=$[算术表达式]  
+   
+* varName=$((算术表达式))  
+   
+* varName=`expr $num1 + $num2`  使用这种格式要注意两个数字和+号中间要有空格。
+
+```
+#!/bin/bash
+num=1
+let num=$num+1
+num=$[ $num+1 ]
+num=$(($num+1))
+num=`expr $num + 1`
+echo $num
+```
+
+> 逻辑运算符
+
+* 需要用到shell中的逻辑操作符
+-a 与
+-o 或
+！ 非
+```
+#!/bin/bash
+num1=10
+num2=20
+nume3=15
+if [ $num1 -lt $num3 -a $num2 -gt $num3 ]
+then
+    echo num is between 10 and 20
+else
+    echo something else
+fi
+```
+
+```
+#!/bin/bash
+num1=10
+num2=20
+num3=15
+if [[ $num1 -lt $num3 && $num2 -gt $num3 ]]
+then
+    echo num is between 10 and 20
+else
+    echo something else
+fi
+```
+* if [ 条件A -a 条件B ] 
+* if [ 条件A ] && [条件B ]
+* if(( A && B ))
+* if [[ A && B ]]
+
+>  函数
+格式
+```
+function 函数名(){  
+...  
+} 
+```
+* 引用自定义函数文件时，使用source  func.sh
+* 有利于代码的重用性
+* 函数传递参数（可以使用类似于Java中的args，args[1]代表Shell中的$1）
+* 函数的返回值，只能是数字
+
+```
+#!/bin/bash
+# func.sh
+function func(){
+    echo this is a function
+}
+func
+```
+
+```
+#!/bin/bash
+#b.sh
+source func.sh
+func
+```
+# read
+> read命令接收标准输入（键盘）的输入，或者其他文件描述符的输入。得到输入后，read命令将数据放入一个标准变量中。
+> read如果后面不指定变量，那么read命令会将接收到的数据放置在环境变量REPLY中
+```
+#表示输入时的提示字符串：  
+read -p "Enter your name:" VAR_NAME  
+```
+```
+# -s 表示安全输入，键入密码时不会显示  
+read  -s  -p "Enter your password: " pass
+```
+```
+# -t表示输入等待的时间  
+read -t 5 -p "enter your name:" VAR_NAME 
+```
+# declare
+用来限定变量的属性
+* -r 只读
+* -i 整数：某些算术计算允许在被声明为整数的变量中完成，而不需要特别使用expr或let来完成。
+* -a 数组
