@@ -341,3 +341,113 @@ read -t 5 -p "enter your name:" VAR_NAME
 * -r 只读
 * -i 整数：某些算术计算允许在被声明为整数的变量中完成，而不需要特别使用expr或let来完成。
 * -a 数组
+
+只读
+```
+#!/bin/bash
+num=10
+declare -r num
+```
+整数
+```
+#!/bin/bash
+num1=10
+num1=num1+1
+echo $num1
+# 10+1
+
+declare -i num2
+num2=10
+num2=num2+1
+echo num2
+# 11
+```
+数组
+```
+#!/bin/bash
+declare -a arr
+arr=(1 2 3 4 5)
+echo ${arr[*]}
+# 1 2 3 4 5
+```
+
+# 字符串操作
+```
+${#VAR_NAME} 获取长度
+${variable:offset:length} ${variable:offset} 字符串截取
+${variable: -length} 取尾部的指定个数的字符
+${variable^^} 小写转大写
+${variable,,} 大写转小写
+```
+```
+#!/bin/bash
+name=Alice
+echo ${#name}
+echo ${name:0:3}
+echo ${name^^}
+echo ${name,,}
+
+# 5
+# Ali
+# ALICE
+# alice
+```
+# 数组
+> 定义： -a declare 表示普通数组
+
+特点
+* 支持稀疏格式
+* 仅支持一维数组
+
+数组赋值方式
+* 一次对一个元素赋值a[0]=$RANDOM
+* 一次对多个元素赋值a=(a b c d)
+
+按索引进行赋值a=([0]=a [3]=b [1]=c)<br>
+使用read命令read -a ARRAY_NAME查看元素
+```
+${array[index]} 查看数组指定下标的元素
+${array} 查看数组的第一个元素
+${array[*]} ${array[@]} 查看数组的所有元素
+${#array[*]} ${#array[@]} 获取数组的长度
+${#array[0]} 获取数组内元素的长度 注意：${#ARRAY[0]}表示获取数组中的第一个元素的长度，等于${#ARRAY}
+unset array[index] 删除数组元素
+```
+从数组中获取某一片段之内的元素（操作类似于字符串操作）
+```
+${array[@]:offset:length}
+1 offset 偏移的元素个数
+2 length 取出的元素的个数
+3 ${array[@]:offset:length} 取出偏移量后的指定个数的元素
+4 ${array[@]:offset} 取出数组中偏移量后的所有元素
+```
+
+```
+#!/bin/bash
+declare -a arr
+arr=(a b c d)
+arr[1]=x
+echo ${arr[*]}
+echo ${#arr[*]}
+echo ${#arr[1]}
+echo ${arr[1]}
+
+# a x c d
+# 4
+# 1
+# x
+```
+# 其他命令
+## date
+显示当前时间
+* 格式化输出 +%Y-%m-%d
+* 格式%s表示自1970-01-01 00:00:00以来的秒数
+* 指定时间输出 --date='2017-28-16 09:42:55'
+* 指定时间输出 --date='3 days ago'  （3天之前，3天之后可以用-3）
+```
+#!/bin/bash
+echo `date +%Y-%m-%d-%H:%M:%S`
+echo `date +%s`
+echo `date --date='2017-28-16 09:42:55'`
+echo `--date='3 days ago'`
+```
